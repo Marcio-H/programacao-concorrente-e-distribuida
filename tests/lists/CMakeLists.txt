@@ -1,3 +1,5 @@
+project(NextNeighbor)
+
 enable_testing()
 
 add_executable(
@@ -6,7 +8,13 @@ add_executable(
 )
 target_link_libraries(
         list_int_tests
+        PRIVATE
         gtest_main
+)
+target_link_libraries(
+        list_int_tests
+        PRIVATE
+        mlists
 )
 
 include(GoogleTest)

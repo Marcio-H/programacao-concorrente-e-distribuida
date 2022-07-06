@@ -29,6 +29,6 @@ void free_str_list(List* list) {
     free(list);
 }
 
-int get_value_from_str_list(List* list, size_t index) {
+int get_value_from_integer_list(List* list, size_t index) {
     return list->array[index];
 }

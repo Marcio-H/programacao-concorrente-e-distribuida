@@ -1,34 +1,34 @@
 #include <stdlib.h>
-#include "liststr.h"
+#include "listdouble.h"
 
 struct list {
-    char** array;
+    double* array;
     size_t used;
     size_t size;
 };
 
-List* new_str_list(size_t size) {
+List* new_double_list(size_t size) {
     List* list = malloc(sizeof list);
 
-    list->array = malloc(size * sizeof(char));
+    list->array = malloc(size * sizeof(double));
     list->used = 0;
     list->size = size;
     return list;
 }
 
-void push_str_list(List* list, char* element) {
+void push_double_list(List* list, double element) {
     if (list->used == list->size) {
         list->size += INCREMENT_SIZE;
-        list->array = realloc(list->array, list->size * sizeof(char));
+        list->array = realloc(list->array, list->size * sizeof(double));
     }
     list->array[list->used++] = element;
 }
 
-void free_str_list(List* list) {
+void free_double_list(List* list) {
     free(list->array);
     free(list);
 }
 
-char* get_value_from_str_list(List* list, size_t index) {
+double get_value_from_double_list(List* list, size_t index) {
     return list->array[index];
 }

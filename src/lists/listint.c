@@ -28,3 +28,7 @@ void free_integer_list(List* list) {
     free(list->array);
     free(list);
 }
+
+int get_value_from_integer_list(List* list, size_t index) {
+    return list->array[index];
+}

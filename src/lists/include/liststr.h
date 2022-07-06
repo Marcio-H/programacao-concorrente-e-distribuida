@@ -7,5 +7,6 @@
 List* new_str_list(size_t size);
 void push_str_list(List* list, char* element);
 void free_str_list(List* list);
+char* get_value_from_str_list(List* list, size_t index);
 
 #endif

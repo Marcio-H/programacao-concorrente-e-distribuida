@@ -16,12 +16,12 @@ List* new_double_list(size_t size) {
     return list;
 }
 
-void push_double_list(List* list, double element) {
+void push_double_list(List* list, double value) {
     if (list->used == list->size) {
         list->size += INCREMENT_SIZE;
         list->array = realloc(list->array, list->size * sizeof(double));
     }
-    list->array[list->used++] = element;
+    list->array[list->used++] = value;
 }
 
 void free_double_list(List* list) {
@@ -31,4 +31,8 @@ void free_double_list(List* list) {
 
 double get_value_from_double_list(List* list, size_t index) {
     return list->array[index];
+}
+
+size_t size(List* list) {
+    return list->used;
 }

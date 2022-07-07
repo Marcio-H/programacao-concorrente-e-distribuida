@@ -10,7 +10,6 @@ TEST(ListDoubleTests, StoreAndGetValue) {
     const double value2 = 3.45;
     const double value3 = 9.9995;
 
-
     push_double_list(double_list, value1);
     push_double_list(double_list, value2);
     push_double_list(double_list, value3);

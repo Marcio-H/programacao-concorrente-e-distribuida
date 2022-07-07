@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(NextNeighbor)
 
+message(STATUS "Building tests...")
+
 set(CMAKE_CXX_STANDARD 14)
 
 include(FetchContent)
@@ -16,3 +18,4 @@ FetchContent_MakeAvailable(googletest)
 include(CMakePackageConfigHelpers)
 
 add_subdirectory(lists)
+add_subdirectory(math)

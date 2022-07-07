@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
-#include "listdouble.h"
+extern "C" {
+    #include "listdouble.h"
+}
 
 TEST(ListDoubleTests, StoreAndGetValue) {
     List* double_list = new_double_list(5);

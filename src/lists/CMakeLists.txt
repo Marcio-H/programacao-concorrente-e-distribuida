@@ -12,7 +12,7 @@ file(
 file(
         GLOB
         headers_files
-        "${PROJECT_SOURCE_DIR}/include/*.c"
+        "${PROJECT_SOURCE_DIR}/include/*.h"
 )
 
 add_library(${PROJECT_NAME} ${source_files})
@@ -26,13 +26,3 @@ target_include_directories(
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/
 )
-
-set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "d")
-
-include(GNUInstallDirs)
-
-install(TARGETS ${PROJECT_NAME}
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
-
-install(FILES ${headers_files} DESTINATION include/utils)

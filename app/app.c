@@ -1,50 +1,51 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "listdouble.h"
+
+List* read_from_file(char* file_path);
 
 int main(int argc, char *argv[])
 {
-    FILE *arqin, *arqout;
-    char linha[100];
-    char *result;
-    double *numbers;
+    List* number = read_from_file(argv[1]);
 
-    numbers = (double*)malloc(100 * sizeof(double));
-
-    // Abre um arquivo no modo leitura
-    arqin = fopen(argv[1], "rt");
-    if (arqin == NULL)    {
-        printf("Erro na abertura do arquivo\n");
-        return;
+    for (int i = 0; i < size(number); ++i) {
+        printf("%.2f\n", get_value_from_double_list(number, i));
     }
 
-    // Abre um arquivo no modo gravacao
-    arqout = fopen("mp.txt","w");
-    if(arqout == NULL)
+    return EXIT_SUCCESS;
+}
+
+List* read_from_file(char* file_path) {
+    FILE *arqin;
+    char* line;
+    List* numbers = new_double_list(10);
+
+    arqin = fopen(file_path, "r");
+    if (arqin == NULL)
     {
-        printf("Error na abertura do arquivo de saida");
-        exit(1);
+        printf("Erro na abertura do arquivo\n");
+        exit(EXIT_FAILURE);
     }
-
-    i = 0;
     while (!feof(arqin))
     {
-        // Lê uma linha (com o '\n')
-        result = fgets(linha, 100, arqin);  // lê até 99 caracteres ou até o '\n'
-        if (result) {
-            printf("%s\n", linha);
-            if ((i%100) == 0)
-                numbers = (double*)realloc(numbers, ((i/100)*100+100) * sizeof(double));
-            numbers[i] = atof(linha);
-            fprintf(arqout, "%d %.15lf\n", i, numbers[i]);
-        }
-        i++;
+        fgets(line, 100, arqin);
+        printf("Colocando valor %s", line);
+        push_double_list(numbers, atof(line));
     }
-
-    for (int x=0; x < 5; x++)
-        printf("double array: %.15lf\n", numbers[x]);
-
-    fclose(arqout);
     fclose(arqin);
-
-    return 0;
+    return numbers;
 }
+
+
+
+
+
+//   FILE  *arqout;
+//    // Abre um arquivo no modo gravacao
+//    arqout = fopen("mp.txt","w");
+//    if(arqout == NULL)
+//    {
+//        printf("Error na abertura do arquivo de saida");
+//        exit(1);
+//    }
+//    fclose(arqout);

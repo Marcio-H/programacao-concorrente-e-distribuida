@@ -16,7 +16,7 @@ List* new_double_list(size_t size) {
     return list;
 }
 
-void push_double_list(List* list, double value) {
+void push_value_to_double_list(List* list, double value) {
     if (list->used == list->size) {
         list->size += INCREMENT_SIZE;
         list->array = realloc(list->array, list->size * sizeof(double));
@@ -33,6 +33,15 @@ double get_value_from_double_list(List* list, size_t index) {
     return list->array[index];
 }
 
-size_t size(List* list) {
+size_t get_size_from_double_list(List* list) {
     return list->used;
+}
+
+//Muito cuidado ao usar este metodo, uma sublista não deve chamar os metodos push e free;
+List* sub_list(List* list, size_t from, size_t to) {
+    List* new_list = malloc(sizeof list);
+
+    new_list->array = list->array + from;
+    new_list->used = to - from;
+    return new_list;
 }

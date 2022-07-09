@@ -1,4 +1,5 @@
 #include <math.h>
+#include <omp.h>
 #include "euclidean.h"
 
 
@@ -15,13 +16,14 @@ double distance(List* l1, List* l2) {
 
 double distance_parallel(List* l1, List* l2) {
     size_t lenght = get_size_from_double_list(l1);
-    double sum;
+    double sum, subtract;
+    int i;
 
-    #pragma omp parallel for default(none) reduction(+ : sum) shared(lenght, l1, l2)
-    for (int i = 0; i < lenght; i++) {
-        const double subtract = get_value_from_double_list(l1, i) - get_value_from_double_list(l2, i);
-
-        sum = subtract * subtract;
+    #pragma omp parallel for default(none) shared(lenght, l1, l2, sum) private(subtract, i)
+    for (i = 0; i < lenght; i++) {
+        subtract = get_value_from_double_list(l1, i) - get_value_from_double_list(l2, i);
+        #pragma omp critical(sum_euclidian)
+        sum += subtract * subtract;
     }
     return sqrt(sum);
 }

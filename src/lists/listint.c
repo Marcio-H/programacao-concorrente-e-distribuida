@@ -33,6 +33,13 @@ int get_value_from_integer_list(List* list, size_t index) {
     return list->array[index];
 }
 
-size_t get_size_from_integer_list(List* list) {
+size_t get_size_from_integer_list(List* list)
+{
     return list->used;
+}
+
+void push_value_to_index_integer_list(List* list, int value, size_t index)
+{
+    list->array[index] = value;
+    list->used++;
 }

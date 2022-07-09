@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <omp.h>
 #include "listdouble.h"
 #include "listint.h"
 #include "euclidean.h"
@@ -70,19 +71,20 @@ void process_euclidean_data(List* numbers, Data* data)
     int i, j, smaller_index;
     double smaller_value, value;
 
-    #pragma omp parallel for default(none) shared(data, numbers) private(smaller_value, smaller_index, i, j, value)
+    #pragma omp parallel for shared(data) private(smaller_value, smaller_index, i, value)
     for (i = 0; i < data->used; ++i)
     {
         smaller_value = 9999;
         smaller_index = 0;
 
-        #pragma omp parallel for default(none) shared(smaller_value, i, data, numbers, smaller_index) private(value, j)
+        #pragma omp parallel for shared(smaller_value, numbers, smaller_index) private(value, j, i)
         for (j = 0; j < data->used; ++j)
         {
             if (i != j)
             {
                 #if _OPENMP
-                value = distance_parallel(sub_list(numbers, i, i + data->subsequence), sub_list(numbers, j, j + data->subsequence));
+                value = distance(sub_list(numbers, i, i + data->subsequence), sub_list(numbers, j, j + data->subsequence));
+//                value = distance_parallel(sub_list(numbers, i, i + data->subsequence), sub_list(numbers, j, j + data->subsequence));
                 #else
                 value = distance(sub_list(numbers, i, i + data->subsequence), sub_list(numbers, j, j + data->subsequence));
                 #endif
@@ -96,8 +98,14 @@ void process_euclidean_data(List* numbers, Data* data)
                 }
             }
         }
-        push_value_to_integer_list(data->indexes, smaller_index + 1);
-        push_value_to_double_list(data->values, smaller_value);
+        #pragma omp critical(push_values)
+        {
+//        push_value_to_integer_list(data->indexes, smaller_index + 1);
+//        push_value_to_double_list(data->values, smaller_value);
+            push_value_to_index_integer_list(data->indexes, smaller_index + 1, (unsigned long) i);
+            push_value_to_index_double_list(data->values, smaller_value, (unsigned long) i);
+
+        }
     }
 }
 
@@ -105,25 +113,16 @@ void write_report(List* indexes, List* values)
 {
     FILE  *arqout;
 
-    arqout = fopen("/home/marcio/dev/git/programacao-concorrente-e-distribuida/resources/output.txt","w");
+    arqout = fopen("/home/aluno/marcio/dev/git/programacao-concorrente-e-distribuida/resources/output.txt","w"); //arrumar isso
     if(arqout == NULL)
     {
         printf("Error na abertura do arquivo de saida");
         exit(1);
     }
 //    fazer funções
-    fprintf(arqout, "Vetor de índices dos vmp:\n");
-    for (int i = 0; i < get_size_from_integer_list(indexes) - 1; ++i)
+    for (int i = 0; i < get_size_from_integer_list(indexes); ++i)
     {
-        fprintf(arqout,"%d - ", get_value_from_integer_list(indexes, i));
+        fprintf(arqout,"%d - %f\n", get_value_from_integer_list(indexes, i), get_value_from_double_list(values, i));
     }
-    fprintf(arqout,"%d\n", get_value_from_integer_list(indexes, get_size_from_integer_list(indexes) - 1));
-//    fazer funções
-    fprintf(arqout, "Vetor de índices dos vmp:\n");
-    for (int i = 0; i < get_size_from_double_list(values) - 1; ++i)
-    {
-        fprintf(arqout,"%f - ", get_value_from_double_list(values, i));
-    }
-    fprintf(arqout,"%f\n", get_value_from_double_list(values, get_size_from_integer_list(values) - 1));
     fclose(arqout);
 }

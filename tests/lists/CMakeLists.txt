@@ -7,7 +7,7 @@ enable_testing()
 
 add_executable(
         list_int_tests
-        list_int_tests.cpp
+        list_double_tests.cpp
 )
 
 target_link_libraries(list_int_tests PRIVATE gtest_main)

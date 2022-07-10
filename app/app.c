@@ -90,8 +90,11 @@ void process_euclidean_data(List* numbers, Data* data)
                 smaller_index = j;
             }
         }
-        push_value_to_index_integer_list(data->indexes, smaller_index + 1, i);
-        push_value_to_index_double_list(data->values, smaller_value, i);
+        #pragma omp critical(add)
+        {
+            push_value_to_index_integer_list(data->indexes, smaller_index + 1, i);
+            push_value_to_index_double_list(data->values, smaller_value, i);
+        }
     }
 }
 
@@ -99,13 +102,12 @@ void write_report(List* indexes, List* values)
 {
     FILE  *arqout;
 
-    arqout = fopen("/home/marcio/dev/git/programacao-concorrente-e-distribuida/resources/output.txt","w"); //arrumar isso
+    arqout = fopen(RESOURCE_OUTPUT_PATH,"w");
     if(arqout == NULL)
     {
         printf("Error na abertura do arquivo de saida");
         exit(1);
     }
-//    fazer funções
     for (int i = 0; i < get_size_from_integer_list(indexes); ++i)
     {
         fprintf(arqout,"%d - %f\n", get_value_from_integer_list(indexes, i), get_value_from_double_list(values, i));

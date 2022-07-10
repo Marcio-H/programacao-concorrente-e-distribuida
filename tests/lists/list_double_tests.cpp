@@ -42,19 +42,3 @@ TEST(ListDoubleTests, StoreValueStressTest)
     }
     SUCCEED();
 }
-
-TEST(ListDoubleTests, SublistStressTest)
-{
-    List* double_list = new_double_list(4);
-
-    push_value_to_double_list(double_list, 0.1);
-    push_value_to_double_list(double_list, 0.2);
-    push_value_to_double_list(double_list, 0.3);
-    push_value_to_double_list(double_list, 0.4);
-    for (int i = 0; i < 18246840; ++i)
-    {
-        List* ptr = sub_list(double_list, 0, 3);
-        free(ptr);
-    }
-    SUCCEED();
-}

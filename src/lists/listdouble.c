@@ -37,17 +37,13 @@ size_t get_size_from_double_list(List* list) {
     return list->used;
 }
 
-//Muito cuidado ao usar este metodo, uma sublista não deve chamar os metodos push e free;
-List* sub_list(List* list, size_t from, size_t to) {
-    List* new_list = malloc(sizeof list);
-
-    new_list->array = list->array + from;
-    new_list->used = to - from;
-    return new_list;
-}
-
 void push_value_to_index_double_list(List* list, double value, size_t index)
 {
     list->array[index] = value;
     list->used++;
+}
+
+double* get_vector_from_double_list(List* list)
+{
+    return list->array;
 }

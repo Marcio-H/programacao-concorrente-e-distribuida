@@ -70,23 +70,28 @@ void process_euclidean_data(List* numbers, Data* data)
     int i, j, smaller_index;
     double smaller_value, value;
 
+    #pragma omp parallel for default(none) shared(data, numbers) private(smaller_value, smaller_index, j, value)
     for (i = 0; i < data->used; ++i)
     {
         smaller_value = 9999;
         for (j = 0; j < data->used; ++j)
         {
-            if (i != j)
+            if (i == j)
             {
-                value = self_distance(numbers, i, j, data->subsequence);
-                if (value < smaller_value)
-                {
-                    smaller_value = value;
-                    smaller_index = j;
-                }
+                continue;
+            }
+            double* vector_one = get_vector_from_double_list(numbers) + i;
+            double* vector_two = get_vector_from_double_list(numbers) + j;
+
+            value = distance(vector_one, vector_two, data->subsequence);
+            if (value < smaller_value)
+            {
+                smaller_value = value;
+                smaller_index = j;
             }
         }
-        push_value_to_integer_list(data->indexes, smaller_index + 1);
-        push_value_to_double_list(data->values, smaller_value);
+        push_value_to_index_integer_list(data->indexes, smaller_index + 1, i);
+        push_value_to_index_double_list(data->values, smaller_value, i);
     }
 }
 

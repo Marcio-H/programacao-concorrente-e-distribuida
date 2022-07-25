@@ -16,6 +16,15 @@ List* new_double_list(size_t size) {
     return list;
 }
 
+List* new_double_list_with_array(size_t size, double* array) {
+    List* list = malloc(sizeof list);
+
+    list->array = array;
+    list->used = size;
+    list->size = size;
+    return list;
+}
+
 void push_value_to_double_list(List* list, double value) {
     if (list->used == list->size) {
         list->size += INCREMENT_SIZE;

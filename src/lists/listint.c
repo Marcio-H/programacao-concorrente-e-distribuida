@@ -16,12 +16,12 @@ List* new_integer_list(size_t size) {
     return list;
 }
 
-void push_integer_list(List* list, int element) {
+void push_value_to_integer_list(List *list, int value) {
     if (list->used == list->size) {
         list->size += INCREMENT_SIZE;
         list->array = realloc(list->array, list->size * sizeof(int));
     }
-    list->array[list->used++] = element; 
+    list->array[list->used++] = value;
 }
 
 void free_integer_list(List* list) {
@@ -31,4 +31,15 @@ void free_integer_list(List* list) {
 
 int get_value_from_integer_list(List* list, size_t index) {
     return list->array[index];
+}
+
+size_t get_size_from_integer_list(List* list)
+{
+    return list->used;
+}
+
+void push_value_to_index_integer_list(List* list, int value, size_t index)
+{
+    list->array[index] = value;
+    list->used++;
 }
